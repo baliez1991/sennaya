@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комунальні платежі</title>
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --card-bg: #1e1f24;
+            --gemini-blue: #8ab4f8;
+            --gemini-dark-blue: #1a73e8;
+            --text-main: #e3e3e3;
+            --text-muted: #9aa0a6;
+            --input-bg: #131418;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            color: var(--gemini-blue);
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid rgba(138, 180, 248, 0.1);
+        }
+        .fixed-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+        .fixed-val {
+            color: var(--gemini-blue);
+            font-weight: bold;
+        }
+        .calc-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .calc-header span {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-left: 8px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .grid-col label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        input {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid #333;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: var(--gemini-blue);
+        }
+        .sum-val {
+            color: var(--gemini-blue);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            height: 38px;
+        }
+        .total-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding: 20px 16px;
+            background: linear-gradient(135deg, #1a73e822 0%, #1e1f24 100%);
+            border: 1px solid var(--gemini-dark-blue);
+        }
+        .total-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .total-sum {
+            font-size: 24px;
+            color: var(--gemini-blue);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Комунальні платежі</h1>
+    <div class="subtitle">Калькулятор Gemini Style</div>
+
+    <!-- Фіксовані платежі -->
+    <div class="card fixed-item">
+        <div>🏢 ОСМД</div>
+        <div class="fixed-val">2 390.00 ₴</div>
+    </div>
+    <div class="card fixed-item">
+        <div>🌐 Інтернет</div>
+        <div class="fixed-val">290.00 ₴</div>
+    </div>
+    <div class="card fixed-item">
+        <div>🚚 Доставка газу</div>
+        <div class="fixed-val">62.00 ₴</div>
+    </div>
+
+    <!-- Газ -->
+    <div class="card">
+        <div class="calc-header">🔥 Газ (колонка) <span>× 7.96 ₴</span></div>
+        <div class="grid-3">
+            <div class="grid-col"><label>Минулий</label><input type="number" id="gas-prev" oninput="calculate()"></div>
+            <div class="grid-col"><label>Поточний</label><input type="number" id="gas-curr" oninput="calculate()"></div>
+            <div class="grid-col"><label>Сума</label><div class="sum-val" id="gas-sum">0.00 ₴</div></div>
+        </div>
+    </div>
+
+    <!-- Вода -->
+    <div class="card">
+        <div class="calc-header">💧 Вода <span>× 17.00 ₴</span></div>
+        <div class="grid-3">
+            <div class="grid-col"><label>Минулий</label><input type="number" id="water-prev" oninput="calculate()"></div>
+            <div class="grid-col"><label>Поточний</label><input type="number" id="water-curr" oninput="calculate()"></div>
+            <div class="grid-col"><label>Сума</label><div class="sum-val" id="water-sum">0.00 ₴</div></div>
+        </div>
+    </div>
+
+    <!-- Електроенергія -->
+    <div class="card">
+        <div class="calc-header" style="margin-bottom:4px;">⚡ Електроенергія</div>
+        
+        <div class="calc-header" style="font-size:13px; margin-top:8px;">День (A1) <span>× 4.32 ₴</span></div>
+        <div class="grid-3" style="margin-bottom:12px;">
+            <div class="grid-col"><label>Минулий</label><input type="number" id="el-day-prev" oninput="calculate()"></div>
+            <div class="grid-col"><label>Поточний</label><input type="number" id="el-day-curr" oninput="calculate()"></div>
+            <div class="grid-col"><label>Сума</label><div class="sum-val" id="el-day-sum">0.00 ₴</div></div>
+        </div>
+
+        <div class="calc-header" style="font-size:13px;">Ніч (A2) <span>× 2.16 ₴</span></div>
+        <div class="grid-3">
+            <div class="grid-col"><label>Минулий</label><input type="number" id="el-night-prev" oninput="calculate()"></div>
+            <div class="grid-col"><label>Поточний</label><input type="number" id="el-night-curr" oninput="calculate()"></div>
+            <div class="grid-col"><label>Сума</label><div class="sum-val" id="el-night-sum">0.00 ₴</div></div>
+        </div>
+    </div>
+
+    <!-- Разом -->
+    <div class="card total-card">
+        <div class="total-title">РАЗОМ</div>
+        <div class="total-sum" id="total-sum">2 742.00 ₴</div>
+    </div>
+</div>
+
+<script>
+    const rates = {
+        gas: 7.96,
+        water: 17.00,
+        elDay: 4.32,
+        elNight: 2.16
+    };
+    const fixedTotal = 2390 + 290 + 62; // 2742
+
+    function calcRow(prevId, currId, sumId, rate) {
+        let prev = parseFloat(document.getElementById(prevId).value) || 0;
+        let curr = parseFloat(document.getElementById(currId).value) || 0;
+        let sum = 0;
+        if (curr > prev) {
+            sum = (curr - prev) * rate;
+        }
+        document.getElementById(sumId).innerText = sum.toFixed(2) + ' ₴';
+        return sum;
+    }
+
+    function calculate() {
+        let gasSum = calcRow('gas-prev', 'gas-curr', 'gas-sum', rates.gas);
+        let waterSum = calcRow('water-prev', 'water-curr', 'water-sum', rates.water);
+        let elDaySum = calcRow('el-day-prev', 'el-day-curr', 'el-day-sum', rates.elDay);
+        let elNightSum = calcRow('el-night-prev', 'el-night-curr', 'el-night-sum', rates.elNight);
+
+        let total = fixedTotal + gasSum + waterSum + elDaySum + elNightSum;
+        
+        // Форматуємо суму з пробілами (наприклад, 2 742.00)
+        let formattedTotal = total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        document.getElementById('total-sum').innerText = formattedTotal + ' ₴';
+    }
+</script>
+</body>
+</html>
